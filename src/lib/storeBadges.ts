@@ -243,7 +243,8 @@ export async function drawStoreBadges(
   )
   const maxLogoHeight = Math.round((logoAreaHeight / rows) * (count === 1 ? 0.9 : 0.75))
 
-  const gapX = Math.round((availableWidth / cols) * (1 - scaleFactor))
+  const rawGapX = Math.round((availableWidth / cols) * (1 - scaleFactor))
+  const gapX = Math.min(rawGapX, Math.round(maxLogoWidth * 0.6))
   const gapY = rows > 1 ? Math.round(logoAreaHeight * 0.05) : 0
 
   for (let i = 0; i < defs.length; i++) {
