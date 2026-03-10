@@ -1,0 +1,32 @@
+{
+  "id": 5301321,
+  "title": "Solar",
+  "musicType": "single",
+  "releaseDate": "2026-03-14",
+  "artwork": "/mock-artwork/solar.jpg",
+  "smartLink": "https://ditto.fm/solar-darkoo",
+  "primaryGenre": {
+    "id": 187,
+    "name": "Afrobeats"
+  },
+  "secondaryGenre": null,
+  "artists": [
+    {
+      "position": 0,
+      "artistId": 100001,
+      "name": "Darkoo",
+      "type": 1
+    }
+  ],
+  "label": {
+    "id": 50001,
+    "name": "Black Pearl Music Group"
+  },
+  "copyrightHolder": "Black Pearl Music Group, under exclusive licence to Ditto",
+  "copyrightYear": 2026,
+  "language": {
+    "id": 44,
+    "name": "English",
+    "abbreviation": "en"
+  }
+}

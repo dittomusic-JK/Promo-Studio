@@ -1,0 +1,75 @@
+// Ditto Promo Studio — Dark Creative UI Tokens
+
+// ── Brand Colours ──────────────────────────────────────────
+$brand-primary: #5f1fff;
+$brand-primary-hover: #7f4dff;
+$brand-primary-active: #8640f4;
+$brand-secondary: #287ef7;
+$brand-secondary-hover: #559cff;
+
+$pink: #ff006e;
+$mint: #12c1ae;
+$indigo: #3a1bb9;
+$purple: #8640f4;
+$light-purple: #d9c1ff;
+
+// ── Semantic ───────────────────────────────────────────────
+$error: #ec0515;
+$warning: #ffb100;
+$success: #00e785;
+$info: #287ef7;
+
+// ── Dark Surface System ────────────────────────────────────
+$surface-0: #0c0c18;   // deepest — body, app shell
+$surface-1: #14142a;   // main content area
+$surface-2: #1e1e3a;   // cards, elevated panels
+$surface-3: #2a2a4a;   // hover states, active surfaces
+$surface-4: #343460;   // extra elevation (dropdowns, modals)
+
+// ── Text ───────────────────────────────────────────────────
+$text-primary: #ededf4;
+$text-secondary: #9898b0;
+$text-muted: #5e5e7a;
+
+// ── Borders ────────────────────────────────────────────────
+$border-subtle: rgba(255, 255, 255, 0.06);
+$border-medium: rgba(255, 255, 255, 0.1);
+$border-active: rgba(95, 31, 255, 0.5);
+
+// ── Glass ──────────────────────────────────────────────────
+$glass-bg: rgba(255, 255, 255, 0.03);
+$glass-bg-hover: rgba(255, 255, 255, 0.06);
+$glass-border: rgba(255, 255, 255, 0.07);
+
+// ── Glow & Shadow ──────────────────────────────────────────
+$glow-primary: 0 0 24px rgba(95, 31, 255, 0.3);
+$glow-primary-sm: 0 0 12px rgba(95, 31, 255, 0.2);
+$glow-success: 0 0 16px rgba(0, 231, 133, 0.25);
+$shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.4);
+$shadow-card: 0 4px 16px rgba(0, 0, 0, 0.3);
+$shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 20px rgba(95, 31, 255, 0.15);
+
+// ── Typography ─────────────────────────────────────────────
+$font-body: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif;
+$font-heading: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+
+// ── Spacing ────────────────────────────────────────────────
+$gutter: 30px;
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 16px;
+$radius-xl: 20px;
+$radius-pill: 999px;
+
+// ── Breakpoints ────────────────────────────────────────────
+$bp-xs: 480px;
+$bp-sm: 600px;
+$bp-md: 960px;
+$bp-lg: 1080px;
+$bp-xl: 1260px;
+
+// ── Platform Colours ───────────────────────────────────────
+$instagram-gradient: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+$twitter-blue: #1da1f2;
+$facebook-blue: #1877f2;
+$youtube-red: #ff0000;

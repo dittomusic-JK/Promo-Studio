@@ -1,0 +1,120 @@
+import type { AssetTemplate } from '@/types'
+
+const igCarousel: AssetTemplate = {
+  id: 'ig-carousel',
+  name: 'Instagram Carousel',
+  platform: 'instagram',
+  format: 'carousel',
+  width: 1080,
+  height: 1080,
+  variants: [
+    {
+      id: 'bold',
+      name: 'Bold',
+      defaultAlign: 'center',
+      elements: [
+        {
+          type: 'artwork',
+          position: { x: 0, y: 0, anchor: 'top-left' },
+          size: { width: 1080, height: 1080 },
+          style: { objectFit: 'cover' },
+        },
+        {
+          type: 'gradient',
+          position: { x: 0, y: 0, anchor: 'top-left' },
+          size: { width: 1080, height: 1080 },
+          style: { opacity: 0.7, direction: 180 },
+        },
+        {
+          type: 'text',
+          position: { x: 540, y: 390, anchor: 'center' },
+          size: { width: 200, height: 24 },
+          style: { fontSize: 16, fontWeight: 'regular', textAlign: 'center', opacity: 0.5, letterSpacing: 3 },
+          content: '{{musicType}}',
+          toggleable: true,
+          visible: true,
+        },
+        {
+          type: 'text',
+          position: { x: 540, y: 460, anchor: 'center' },
+          size: { width: 900, height: 80 },
+          style: { fontSize: 72, fontWeight: 'black', textAlign: 'center', textTransform: 'uppercase' },
+          content: '{{title}}',
+        },
+        {
+          type: 'text',
+          position: { x: 540, y: 540, anchor: 'center' },
+          size: { width: 900, height: 52 },
+          style: { fontSize: 46, fontWeight: 'bold', textAlign: 'center' },
+          content: '{{artistName}}',
+          toggleable: true,
+          visible: true,
+        },
+        {
+          type: 'text',
+          position: { x: 540, y: 610, anchor: 'center' },
+          size: { width: 600, height: 36 },
+          style: { fontSize: 28, fontWeight: 'regular', textAlign: 'center', opacity: 0.8 },
+          content: '{{releaseDate}}',
+          toggleable: true,
+          visible: true,
+        },
+      ],
+    },
+    {
+      id: 'minimal',
+      name: 'Minimal',
+      defaultAlign: 'center',
+      elements: [
+        {
+          type: 'artwork',
+          position: { x: 140, y: 80, anchor: 'top-center' },
+          size: { width: 800, height: 800 },
+          style: { borderRadius: 8 },
+        },
+        {
+          type: 'gradient',
+          position: { x: 0, y: 0, anchor: 'top-left' },
+          size: { width: 1080, height: 1080 },
+          style: { opacity: 0.4, direction: 180 },
+        },
+        {
+          type: 'text',
+          position: { x: 540, y: 895, anchor: 'top-center' },
+          size: { width: 200, height: 20 },
+          style: { fontSize: 14, fontWeight: 'regular', textAlign: 'center', opacity: 0.5, letterSpacing: 3 },
+          content: '{{musicType}}',
+          toggleable: true,
+          visible: true,
+        },
+        {
+          type: 'text',
+          position: { x: 540, y: 930, anchor: 'top-center' },
+          size: { width: 900, height: 48 },
+          style: { fontSize: 42, fontWeight: 'bold', textAlign: 'center' },
+          content: '{{title}}',
+        },
+        {
+          type: 'text',
+          position: { x: 540, y: 988, anchor: 'top-center' },
+          size: { width: 900, height: 40 },
+          style: { fontSize: 34, fontWeight: 'regular', textAlign: 'center' },
+          content: '{{artistName}}',
+          toggleable: true,
+          visible: true,
+        },
+        {
+          type: 'text',
+          position: { x: 540, y: 1040, anchor: 'top-center' },
+          size: { width: 500, height: 28 },
+          style: { fontSize: 22, fontWeight: 'regular', textAlign: 'center', opacity: 0.7 },
+          content: '{{releaseDate}}',
+          toggleable: true,
+          visible: true,
+        },
+      ],
+    },
+  ],
+}
+
+export default igCarousel

@@ -1,0 +1,120 @@
+import type { AssetTemplate } from '@/types'
+
+const twitterBanner: AssetTemplate = {
+  id: 'twitter-banner',
+  name: 'X/Twitter Banner',
+  platform: 'twitter',
+  format: 'banner',
+  width: 1500,
+  height: 500,
+  variants: [
+    {
+      id: 'centered',
+      name: 'Centered',
+      defaultAlign: 'center',
+      elements: [
+        {
+          type: 'artwork',
+          position: { x: 590, y: 40, anchor: 'top-left' },
+          size: { width: 260, height: 260 },
+          style: { borderRadius: 10 },
+        },
+        {
+          type: 'gradient',
+          position: { x: 0, y: 0, anchor: 'top-left' },
+          size: { width: 1500, height: 500 },
+          style: { opacity: 0.6, direction: 180 },
+        },
+        {
+          type: 'text',
+          position: { x: 750, y: 315, anchor: 'top-center' },
+          size: { width: 400, height: 20 },
+          style: { fontSize: 13, fontWeight: 'regular', textAlign: 'center', opacity: 0.5, letterSpacing: 3 },
+          content: '{{musicType}}',
+          toggleable: true,
+          visible: true,
+        },
+        {
+          type: 'text',
+          position: { x: 750, y: 345, anchor: 'top-center' },
+          size: { width: 1200, height: 46 },
+          style: { fontSize: 40, fontWeight: 'black', textAlign: 'center' },
+          content: '{{title}}',
+        },
+        {
+          type: 'text',
+          position: { x: 750, y: 400, anchor: 'top-center' },
+          size: { width: 1000, height: 32 },
+          style: { fontSize: 26, fontWeight: 'bold', textAlign: 'center' },
+          content: '{{artistName}}',
+          toggleable: true,
+          visible: true,
+        },
+        {
+          type: 'text',
+          position: { x: 750, y: 440, anchor: 'top-center' },
+          size: { width: 600, height: 24 },
+          style: { fontSize: 18, fontWeight: 'regular', textAlign: 'center', opacity: 0.8 },
+          content: '{{releaseDate}}',
+          toggleable: true,
+          visible: true,
+        },
+      ],
+    },
+    {
+      id: 'spread',
+      name: 'Spread',
+      defaultAlign: 'left',
+      elements: [
+        {
+          type: 'artwork',
+          position: { x: 50, y: 50, anchor: 'top-left' },
+          size: { width: 400, height: 400 },
+          style: { objectFit: 'cover', borderRadius: 8 },
+        },
+        {
+          type: 'gradient',
+          position: { x: 0, y: 0, anchor: 'top-left' },
+          size: { width: 1500, height: 500 },
+          style: { opacity: 0.7, direction: 90 },
+        },
+        {
+          type: 'text',
+          position: { x: 520, y: 140, anchor: 'top-left' },
+          size: { width: 200, height: 20 },
+          style: { fontSize: 14, fontWeight: 'regular', textAlign: 'left', opacity: 0.5, letterSpacing: 3 },
+          content: '{{musicType}}',
+          toggleable: true,
+          visible: true,
+        },
+        {
+          type: 'text',
+          position: { x: 520, y: 180, anchor: 'top-left' },
+          size: { width: 600, height: 52 },
+          style: { fontSize: 46, fontWeight: 'black', textAlign: 'left' },
+          content: '{{title}}',
+        },
+        {
+          type: 'text',
+          position: { x: 520, y: 255, anchor: 'top-left' },
+          size: { width: 600, height: 36 },
+          style: { fontSize: 28, fontWeight: 'bold', textAlign: 'left' },
+          content: '{{artistName}}',
+          toggleable: true,
+          visible: true,
+        },
+        {
+          type: 'text',
+          position: { x: 520, y: 305, anchor: 'top-left' },
+          size: { width: 400, height: 28 },
+          style: { fontSize: 22, fontWeight: 'regular', textAlign: 'left', opacity: 0.8 },
+          content: '{{releaseDate}}',
+          toggleable: true,
+          visible: true,
+        },
+      ],
+    },
+  ],
+}
+
+export default twitterBanner

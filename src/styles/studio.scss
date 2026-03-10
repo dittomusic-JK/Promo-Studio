@@ -1,0 +1,440 @@
+@use 'tokens' as *;
+
+// ── App Layout ─────────────────────────────────────────────
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: $surface-0;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 56px;
+  background: $surface-0;
+  border-bottom: 1px solid $border-subtle;
+  position: relative;
+
+  // subtle glow line
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba($brand-primary, 0.2) 50%, transparent);
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: $text-primary;
+    letter-spacing: -0.01em;
+
+    span {
+      background: linear-gradient(135deg, $brand-primary, $brand-secondary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  }
+}
+
+.app-main {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+// ── Wizard Nav ─────────────────────────────────────────────
+.wizard-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 0.875rem 2rem;
+  background: $surface-1;
+
+  &__step {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: $text-muted;
+    transition: all 0.3s ease;
+    border-radius: $radius-pill;
+
+    &-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      background: $surface-2;
+      color: $text-muted;
+      border: 1px solid $border-subtle;
+      transition: all 0.3s ease;
+    }
+
+    &-label {
+      @media (max-width: $bp-sm) {
+        display: none;
+      }
+    }
+
+    &--active {
+      color: $text-primary;
+
+      .wizard-nav__step-number {
+        background: $brand-primary;
+        color: white;
+        border-color: transparent;
+        box-shadow: $glow-primary-sm;
+      }
+    }
+
+    &--completed {
+      color: $text-secondary;
+      cursor: pointer;
+
+      &:hover {
+        color: $text-primary;
+      }
+
+      .wizard-nav__step-number {
+        background: rgba($success, 0.15);
+        color: $success;
+        border-color: rgba($success, 0.2);
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  &__connector {
+    width: 32px;
+    height: 1px;
+    margin: 0 0.125rem;
+    background: $border-subtle;
+
+    &--active {
+      background: linear-gradient(90deg, $brand-primary, rgba($brand-primary, 0.3));
+    }
+
+    &--completed {
+      background: rgba($success, 0.25);
+    }
+  }
+}
+
+// ── Buttons ────────────────────────────────────────────────
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border: 1px solid transparent;
+  border-radius: $radius-pill;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: all 0.25s ease;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+
+  &--primary {
+    background: $brand-primary;
+    color: white;
+    box-shadow: 0 2px 8px rgba($brand-primary, 0.3);
+
+    &:hover {
+      background: $brand-primary-hover;
+      box-shadow: $glow-primary-sm;
+      transform: translateY(-1px);
+    }
+  }
+
+  &--gradient {
+    background: linear-gradient(135deg, $brand-primary, $brand-secondary);
+    color: white;
+    box-shadow: 0 2px 12px rgba($brand-primary, 0.3);
+
+    &:hover {
+      box-shadow: $glow-primary;
+      transform: translateY(-1px);
+    }
+  }
+
+  &--secondary {
+    background: $glass-bg;
+    border-color: $border-medium;
+    color: $text-primary;
+
+    &:hover {
+      background: $glass-bg-hover;
+      border-color: $brand-primary;
+      color: $brand-primary-hover;
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: $text-secondary;
+
+    &:hover {
+      background: $glass-bg;
+      color: $text-primary;
+    }
+  }
+
+  &--sm {
+    padding: 0.4rem 0.875rem;
+    font-size: 0.75rem;
+  }
+
+  &--lg {
+    padding: 0.875rem 2rem;
+    font-size: 0.9375rem;
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+}
+
+// ── Cards ──────────────────────────────────────────────────
+.card {
+  background: $surface-2;
+  border-radius: $radius-lg;
+  border: 1px solid $border-subtle;
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  &--interactive {
+    cursor: pointer;
+
+    &:hover {
+      border-color: rgba($brand-primary, 0.3);
+      box-shadow: $shadow-hover;
+      transform: translateY(-4px);
+    }
+  }
+
+  &--selected {
+    border-color: $brand-primary;
+    box-shadow: $glow-primary;
+  }
+}
+
+// ── Badges ─────────────────────────────────────────────────
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: $radius-pill;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  &::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+  }
+
+  &--single {
+    color: $brand-primary-hover;
+    &::before { background: $brand-primary; }
+  }
+
+  &--ep {
+    color: $mint;
+    &::before { background: $mint; }
+  }
+
+  &--album {
+    color: $pink;
+    &::before { background: $pink; }
+  }
+
+  &--active {
+    color: $success;
+    &::before { background: $success; }
+  }
+}
+
+// ── Section Headers ────────────────────────────────────────
+.section-header {
+  margin-bottom: 2rem;
+
+  &__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin-bottom: 0.375rem;
+    letter-spacing: -0.02em;
+  }
+
+  &__subtitle {
+    font-size: 0.9375rem;
+    color: $text-secondary;
+    line-height: 1.5;
+  }
+}
+
+// ── View Transitions ───────────────────────────────────────
+.view-enter-active,
+.view-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.view-enter-from {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.view-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+// ── Utility ────────────────────────────────────────────────
+.gradient-text {
+  background: linear-gradient(135deg, $brand-primary, $brand-secondary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// ── Toggle Switch ──────────────────────────────────────────
+.toggle-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  cursor: pointer;
+  font-size: 0.8125rem;
+  color: $text-secondary;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  &__track {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    background: $surface-3;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+    flex-shrink: 0;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      background: $text-secondary;
+      border-radius: 50%;
+      transition: all 0.25s ease;
+    }
+  }
+
+  input:checked + .toggle-switch__track {
+    background: $brand-primary;
+
+    &::after {
+      left: 18px;
+      background: white;
+    }
+  }
+
+  &__label {
+    user-select: none;
+  }
+}
+
+// ── Segmented Control ──────────────────────────────────────
+.segmented {
+  display: inline-flex;
+  background: $surface-2;
+  border-radius: $radius-pill;
+  padding: 3px;
+  border: 1px solid $border-subtle;
+
+  &__option {
+    padding: 0.375rem 0.875rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: $text-muted;
+    border-radius: $radius-pill;
+    border: none;
+    background: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      color: $text-secondary;
+    }
+
+    &--active {
+      background: $brand-primary;
+      color: white;
+      box-shadow: $glow-primary-sm;
+    }
+  }
+}
+
+// ── Glass Panel ────────────────────────────────────────────
+.glass-panel {
+  background: $glass-bg;
+  border: 1px solid $glass-border;
+  border-radius: $radius-lg;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+// ── Shimmer Loading ────────────────────────────────────────
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    $surface-2 25%,
+    $surface-3 50%,
+    $surface-2 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: $radius-md;
+}
+
+// ── Pulse Glow Animation ───────────────────────────────────
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: $glow-primary-sm; }
+  50% { box-shadow: $glow-primary; }
+}

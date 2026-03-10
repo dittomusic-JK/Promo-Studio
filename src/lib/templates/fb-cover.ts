@@ -1,0 +1,120 @@
+import type { AssetTemplate } from '@/types'
+
+const fbCover: AssetTemplate = {
+  id: 'fb-cover',
+  name: 'Facebook Cover',
+  platform: 'facebook',
+  format: 'cover',
+  width: 820,
+  height: 312,
+  variants: [
+    {
+      id: 'centered',
+      name: 'Centered',
+      defaultAlign: 'center',
+      elements: [
+        {
+          type: 'artwork',
+          position: { x: 0, y: 0, anchor: 'top-left' },
+          size: { width: 820, height: 312 },
+          style: { objectFit: 'cover' },
+        },
+        {
+          type: 'gradient',
+          position: { x: 0, y: 0, anchor: 'top-left' },
+          size: { width: 820, height: 312 },
+          style: { opacity: 0.7, direction: 180 },
+        },
+        {
+          type: 'text',
+          position: { x: 410, y: 70, anchor: 'top-center' },
+          size: { width: 200, height: 14 },
+          style: { fontSize: 11, fontWeight: 'regular', textAlign: 'center', opacity: 0.5, letterSpacing: 2 },
+          content: '{{musicType}}',
+          toggleable: true,
+          visible: true,
+        },
+        {
+          type: 'text',
+          position: { x: 410, y: 95, anchor: 'top-center' },
+          size: { width: 700, height: 40 },
+          style: { fontSize: 34, fontWeight: 'black', textAlign: 'center' },
+          content: '{{title}}',
+        },
+        {
+          type: 'text',
+          position: { x: 410, y: 148, anchor: 'top-center' },
+          size: { width: 600, height: 30 },
+          style: { fontSize: 24, fontWeight: 'bold', textAlign: 'center' },
+          content: '{{artistName}}',
+          toggleable: true,
+          visible: true,
+        },
+        {
+          type: 'text',
+          position: { x: 410, y: 186, anchor: 'top-center' },
+          size: { width: 400, height: 22 },
+          style: { fontSize: 16, fontWeight: 'regular', textAlign: 'center', opacity: 0.8 },
+          content: '{{releaseDate}}',
+          toggleable: true,
+          visible: true,
+        },
+      ],
+    },
+    {
+      id: 'offset',
+      name: 'Offset',
+      defaultAlign: 'left',
+      elements: [
+        {
+          type: 'artwork',
+          position: { x: 25, y: 26, anchor: 'top-left' },
+          size: { width: 260, height: 260 },
+          style: { objectFit: 'cover', borderRadius: 6 },
+        },
+        {
+          type: 'gradient',
+          position: { x: 0, y: 0, anchor: 'top-left' },
+          size: { width: 820, height: 312 },
+          style: { opacity: 0.7, direction: 90 },
+        },
+        {
+          type: 'text',
+          position: { x: 340, y: 85, anchor: 'top-left' },
+          size: { width: 150, height: 16 },
+          style: { fontSize: 11, fontWeight: 'regular', textAlign: 'left', opacity: 0.5, letterSpacing: 2 },
+          content: '{{musicType}}',
+          toggleable: true,
+          visible: true,
+        },
+        {
+          type: 'text',
+          position: { x: 340, y: 113, anchor: 'top-left' },
+          size: { width: 420, height: 40 },
+          style: { fontSize: 34, fontWeight: 'black', textAlign: 'left' },
+          content: '{{title}}',
+        },
+        {
+          type: 'text',
+          position: { x: 340, y: 165, anchor: 'top-left' },
+          size: { width: 420, height: 28 },
+          style: { fontSize: 22, fontWeight: 'bold', textAlign: 'left' },
+          content: '{{artistName}}',
+          toggleable: true,
+          visible: true,
+        },
+        {
+          type: 'text',
+          position: { x: 340, y: 203, anchor: 'top-left' },
+          size: { width: 300, height: 22 },
+          style: { fontSize: 16, fontWeight: 'regular', textAlign: 'left', opacity: 0.8 },
+          content: '{{releaseDate}}',
+          toggleable: true,
+          visible: true,
+        },
+      ],
+    },
+  ],
+}
+
+export default fbCover

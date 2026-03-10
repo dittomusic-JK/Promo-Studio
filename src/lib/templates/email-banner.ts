@@ -1,0 +1,120 @@
+import type { AssetTemplate } from '@/types'
+
+const emailBanner: AssetTemplate = {
+  id: 'email-banner',
+  name: 'Email Banner',
+  platform: 'general',
+  format: 'banner',
+  width: 600,
+  height: 200,
+  variants: [
+    {
+      id: 'compact',
+      name: 'Compact',
+      defaultAlign: 'left',
+      elements: [
+        {
+          type: 'artwork',
+          position: { x: 20, y: 20, anchor: 'top-left' },
+          size: { width: 160, height: 160 },
+          style: { borderRadius: 6 },
+        },
+        {
+          type: 'gradient',
+          position: { x: 0, y: 0, anchor: 'top-left' },
+          size: { width: 600, height: 200 },
+          style: { opacity: 0.6, direction: 90 },
+        },
+        {
+          type: 'text',
+          position: { x: 230, y: 50, anchor: 'top-left' },
+          size: { width: 120, height: 14 },
+          style: { fontSize: 10, fontWeight: 'regular', textAlign: 'left', opacity: 0.5, letterSpacing: 2 },
+          content: '{{musicType}}',
+          toggleable: true,
+          visible: true,
+        },
+        {
+          type: 'text',
+          position: { x: 230, y: 73, anchor: 'top-left' },
+          size: { width: 340, height: 30 },
+          style: { fontSize: 24, fontWeight: 'black', textAlign: 'left' },
+          content: '{{title}}',
+        },
+        {
+          type: 'text',
+          position: { x: 230, y: 110, anchor: 'top-left' },
+          size: { width: 340, height: 22 },
+          style: { fontSize: 17, fontWeight: 'bold', textAlign: 'left' },
+          content: '{{artistName}}',
+          toggleable: true,
+          visible: true,
+        },
+        {
+          type: 'text',
+          position: { x: 230, y: 140, anchor: 'top-left' },
+          size: { width: 200, height: 18 },
+          style: { fontSize: 13, fontWeight: 'regular', textAlign: 'left', opacity: 0.8 },
+          content: '{{releaseDate}}',
+          toggleable: true,
+          visible: true,
+        },
+      ],
+    },
+    {
+      id: 'minimal',
+      name: 'Minimal',
+      defaultAlign: 'center',
+      elements: [
+        {
+          type: 'artwork',
+          position: { x: 240, y: 40, anchor: 'top-left' },
+          size: { width: 120, height: 120 },
+          style: { borderRadius: 4 },
+        },
+        {
+          type: 'gradient',
+          position: { x: 0, y: 0, anchor: 'top-left' },
+          size: { width: 600, height: 200 },
+          style: { opacity: 0.5, direction: 180 },
+        },
+        {
+          type: 'text',
+          position: { x: 300, y: 10, anchor: 'top-center' },
+          size: { width: 120, height: 10 },
+          style: { fontSize: 9, fontWeight: 'regular', textAlign: 'center', opacity: 0.4, letterSpacing: 2 },
+          content: '{{musicType}}',
+          toggleable: true,
+          visible: true,
+        },
+        {
+          type: 'text',
+          position: { x: 300, y: 28, anchor: 'top-center' },
+          size: { width: 500, height: 24 },
+          style: { fontSize: 20, fontWeight: 'bold', textAlign: 'center' },
+          content: '{{title}}',
+        },
+        {
+          type: 'text',
+          position: { x: 300, y: 173, anchor: 'top-center' },
+          size: { width: 500, height: 18 },
+          style: { fontSize: 14, fontWeight: 'regular', textAlign: 'center' },
+          content: '{{artistName}}',
+          toggleable: true,
+          visible: true,
+        },
+        {
+          type: 'text',
+          position: { x: 300, y: 193, anchor: 'top-center' },
+          size: { width: 300, height: 16 },
+          style: { fontSize: 12, fontWeight: 'regular', textAlign: 'center', opacity: 0.7 },
+          content: '{{releaseDate}}',
+          toggleable: true,
+          visible: true,
+        },
+      ],
+    },
+  ],
+}
+
+export default emailBanner

@@ -1,0 +1,180 @@
+{
+  "meta": {
+    "currentPage": 1,
+    "perPage": 50,
+    "totalCount": 8,
+    "pagesCount": 1
+  },
+  "data": [
+    {
+      "id": 5301321,
+      "artists": [
+        {
+          "position": 0,
+          "artistId": 100001,
+          "name": "Darkoo",
+          "isPlanArtist": false,
+          "isVarious": false,
+          "profileImage": null,
+          "type": 1
+        }
+      ],
+      "status": "active",
+      "releaseDate": "2026-03-14",
+      "title": "Solar",
+      "artwork": "/mock-artwork/solar.jpg",
+      "musicType": "single"
+    },
+    {
+      "id": 4493329,
+      "artists": [
+        {
+          "position": 0,
+          "artistId": 100002,
+          "name": "JELEEL!",
+          "isPlanArtist": false,
+          "isVarious": false,
+          "profileImage": null,
+          "type": 1
+        },
+        {
+          "position": 1,
+          "artistId": 100001,
+          "name": "Darkoo",
+          "isPlanArtist": false,
+          "isVarious": false,
+          "profileImage": null,
+          "type": 1
+        }
+      ],
+      "status": "active",
+      "releaseDate": "2025-06-20",
+      "title": "RHUDE GYAL!",
+      "artwork": "/mock-artwork/rhude-gyal.jpg",
+      "musicType": "single"
+    },
+    {
+      "id": 4364587,
+      "artists": [
+        {
+          "position": 0,
+          "artistId": 100001,
+          "name": "Darkoo",
+          "isPlanArtist": false,
+          "isVarious": false,
+          "profileImage": null,
+          "type": 1
+        }
+      ],
+      "status": "active",
+      "releaseDate": "2025-04-11",
+      "title": "Your Number",
+      "artwork": "/mock-artwork/your-number.jpg",
+      "musicType": "single"
+    },
+    {
+      "id": 4205225,
+      "artists": [
+        {
+          "position": 0,
+          "artistId": 100001,
+          "name": "Darkoo",
+          "isPlanArtist": false,
+          "isVarious": false,
+          "profileImage": null,
+          "type": 1
+        }
+      ],
+      "status": "active",
+      "releaseDate": "2025-01-24",
+      "title": "Like Dat",
+      "artwork": "/mock-artwork/like-dat.jpg",
+      "musicType": "single"
+    },
+    {
+      "id": 4149343,
+      "artists": [
+        {
+          "position": 0,
+          "artistId": 100003,
+          "name": "Almost Joey",
+          "isPlanArtist": false,
+          "isVarious": false,
+          "profileImage": null,
+          "type": 1
+        }
+      ],
+      "status": "active",
+      "releaseDate": "2025-01-10",
+      "title": "Obimo",
+      "artwork": "/mock-artwork/obimo.jpg",
+      "musicType": "single"
+    },
+    {
+      "id": 3669462,
+      "artists": [
+        {
+          "position": 0,
+          "artistId": 100004,
+          "name": "Major League Djz",
+          "isPlanArtist": false,
+          "isVarious": false,
+          "profileImage": null,
+          "type": 1
+        }
+      ],
+      "status": "active",
+      "releaseDate": "2024-08-16",
+      "title": "One Of Them",
+      "artwork": "/mock-artwork/one-of-them.jpg",
+      "musicType": "single"
+    },
+    {
+      "id": 3554659,
+      "artists": [
+        {
+          "position": 0,
+          "artistId": 100001,
+          "name": "Darkoo",
+          "isPlanArtist": false,
+          "isVarious": false,
+          "profileImage": null,
+          "type": 1
+        }
+      ],
+      "status": "active",
+      "releaseDate": "2024-06-28",
+      "title": "Right Now",
+      "artwork": "/mock-artwork/right-now.jpg",
+      "musicType": "single"
+    },
+    {
+      "id": 3402136,
+      "artists": [
+        {
+          "position": 0,
+          "artistId": 100001,
+          "name": "Darkoo",
+          "isPlanArtist": false,
+          "isVarious": false,
+          "profileImage": null,
+          "type": 1
+        },
+        {
+          "position": 1,
+          "artistId": 100005,
+          "name": "Rema",
+          "isPlanArtist": false,
+          "isVarious": false,
+          "profileImage": null,
+          "type": 1
+        }
+      ],
+      "status": "active",
+      "releaseDate": "2024-04-12",
+      "title": "Favourite Girl",
+      "artwork": "/mock-artwork/favourite-girl.jpg",
+      "musicType": "single"
+    }
+  ]
+}
