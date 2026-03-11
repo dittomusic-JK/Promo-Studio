@@ -122,6 +122,7 @@ export async function drawStoreBadges(
   badgeText: string | null,
   needsShadow?: boolean,
   globalTextAlign?: 'left' | 'center' | 'right' | null,
+  region?: { x: number; y: number; width: number; height: number },
 ) {
   const hasBadgeText = badgeText != null && badgeText.trim() !== ''
   const hasStores = badges.length > 0
@@ -141,43 +142,56 @@ export async function drawStoreBadges(
     }
   }
 
-  // Region: bottom portion of canvas — sized by aspect ratio
-  const aspect = templateWidth / templateHeight
-  const isLandscape = aspect > 1.3
-  let regionHeightPct: number
-  let regionPadTopPct: number
+  // Positioning: use explicit region if provided, else compute bottom strip from canvas
+  let regionTop: number
+  let contentLeft: number
+  let contentRight: number
+  let fontRef: number
+  let bottomBound: number // y coordinate of usable area bottom
 
-  if (aspect > 2.2) {
-    // Super-wide banners (twitter-banner, email-banner, fb-cover)
-    regionHeightPct = 0.22
-    regionPadTopPct = 0.02
-  } else if (isLandscape) {
-    regionHeightPct = 0.25
-    regionPadTopPct = 0.03
-  } else if (aspect > 0.9) {
-    // Square
-    regionHeightPct = 0.13
-    regionPadTopPct = 0.015
-  } else if (aspect < 0.65) {
-    // Story (9:16)
-    regionHeightPct = 0.18
-    regionPadTopPct = 0.015
+  if (region) {
+    // Column layout: render within the specified region
+    regionTop = region.y
+    contentLeft = region.x
+    contentRight = region.x + region.width
+    // Use height as font reference — multipliers are calibrated for canvas height,
+    // so scale up to compensate for the smaller region
+    fontRef = region.height * 3.5
+    bottomBound = region.y + region.height
   } else {
-    // Portrait (4:5)
-    regionHeightPct = 0.16
-    regionPadTopPct = 0.02
+    // Default: bottom strip of canvas, sized by aspect ratio
+    const aspect = templateWidth / templateHeight
+    const isLandscape = aspect > 1.3
+    let regionHeightPct: number
+    let regionPadTopPct: number
+
+    if (aspect > 2.2) {
+      regionHeightPct = 0.22
+      regionPadTopPct = 0.02
+    } else if (isLandscape) {
+      regionHeightPct = 0.25
+      regionPadTopPct = 0.03
+    } else if (aspect > 0.9) {
+      regionHeightPct = 0.13
+      regionPadTopPct = 0.015
+    } else if (aspect < 0.65) {
+      regionHeightPct = 0.18
+      regionPadTopPct = 0.015
+    } else {
+      regionHeightPct = 0.16
+      regionPadTopPct = 0.02
+    }
+
+    const regionHeight = Math.round(templateHeight * regionHeightPct)
+    const regionPadTop = Math.round(templateHeight * regionPadTopPct)
+    regionTop = templateHeight - regionHeight + regionPadTop
+    const regionPadX = Math.round(templateWidth * 0.06)
+    contentLeft = regionPadX
+    contentRight = templateWidth - regionPadX
+    fontRef = aspect > 2.2 ? Math.sqrt(templateWidth * templateHeight) : templateHeight
+    bottomBound = templateHeight - Math.round(templateHeight * 0.015)
   }
 
-  const regionHeight = Math.round(templateHeight * regionHeightPct)
-  const regionPadTop = Math.round(templateHeight * regionPadTopPct)
-  const regionTop = templateHeight - regionHeight + regionPadTop
-  const regionPadX = Math.round(templateWidth * 0.06)
-
-  // Font reference dimension: use geometric mean for very wide formats so text isn't tiny
-  const fontRef = aspect > 2.2 ? Math.sqrt(templateWidth * templateHeight) : templateHeight
-
-  const contentLeft = regionPadX
-  const contentRight = templateWidth - regionPadX
   const availableWidth = contentRight - contentLeft
   const centerX = Math.round((contentLeft + contentRight) / 2)
 
@@ -193,7 +207,7 @@ export async function drawStoreBadges(
   // State A: badge text only (no store badges)
   if (hasBadgeText && !hasStores) {
     const badgeFontSize = Math.round(fontRef * 0.045)
-    const textY = regionTop + Math.round((templateHeight - regionTop - Math.round(templateHeight * 0.03) - badgeFontSize) / 2)
+    const textY = regionTop + Math.round((bottomBound - regionTop - badgeFontSize) / 2)
     drawBadgeText(ctx, displayBadgeText!, textXPos, textY, badgeFontSize, headingFont, lightTheme, needsShadow ?? false, resolvedAlign)
     return
   }
@@ -207,10 +221,11 @@ export async function drawStoreBadges(
   let logoAreaTop: number
 
   // State B: badge text + store badges (contextual label — smaller font)
+  const regionGap = region ? Math.round(region.height * 0.04) : Math.round(templateHeight * 0.012)
   if (hasBadgeText) {
     const badgeFontSize = Math.round(fontRef * 0.025)
     drawBadgeText(ctx, displayBadgeText!, textXPos, regionTop, badgeFontSize, headingFont, lightTheme, needsShadow ?? false, resolvedAlign)
-    logoAreaTop = regionTop + badgeFontSize + Math.round(templateHeight * 0.012)
+    logoAreaTop = regionTop + badgeFontSize + regionGap
   } else {
     // State C: store badges only (with "Listen On:" header)
     const headerFontSize = Math.round(fontRef * 0.016)
@@ -225,10 +240,10 @@ export async function drawStoreBadges(
     }
     ctx.fillText('Listen On:', textXPos, regionTop)
     ctx.restore()
-    logoAreaTop = regionTop + headerFontSize + Math.round(templateHeight * 0.012)
+    logoAreaTop = regionTop + headerFontSize + regionGap
   }
 
-  const logoAreaHeight = templateHeight - logoAreaTop - Math.round(templateHeight * 0.015)
+  const logoAreaHeight = bottomBound - logoAreaTop
 
   // Calculate grid layout
   const count = defs.length
@@ -236,10 +251,10 @@ export async function drawStoreBadges(
 
   // Logo sizing — larger for single logo
   const scaleFactor = count === 1 ? 1.0 : count <= 2 ? 0.5 : count <= 4 ? 0.65 : 0.6
-  const maxWidthCap = count === 1 ? 0.25 : 0.12
+  const maxWidthCap = count === 1 ? 0.4 : 0.2
   const maxLogoWidth = Math.min(
     Math.round((availableWidth / cols) * scaleFactor),
-    Math.round(templateWidth * maxWidthCap),
+    Math.round(availableWidth * maxWidthCap),
   )
   const maxLogoHeight = Math.round((logoAreaHeight / rows) * (count === 1 ? 0.9 : 0.75))
 

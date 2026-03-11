@@ -34,6 +34,157 @@ async function loadLogos(): Promise<void> {
   if (!logoWhite) logoWhite = await loadImage(dittoLogoWhiteUrl)
 }
 
+// ── Column Layout for Wide Formats ────────────────────────
+
+interface ColumnLayoutInfo {
+  artworkPosition: { x: number; y: number }
+  textColumn: { x: number; y: number; width: number }
+  badgeRegion: { x: number; y: number; width: number; height: number }
+}
+
+/**
+ * For wide formats with inset artwork, compute a column-based layout:
+ * - Left align:   [Artwork] [Text + Badges]
+ * - Right align:  [Text + Badges] [Artwork]
+ * - Center align: [Text] [Artwork] [Badges]  (3-column)
+ */
+function computeColumnLayout(
+  canvasW: number,
+  canvasH: number,
+  artEl: TemplateElement,
+  visibleTextEls: TemplateElement[],
+  fontSizeScale: number,
+  titleSizeScale: number | null | undefined,
+  artistSizeScale: number | null | undefined,
+  align: 'left' | 'center' | 'right',
+): ColumnLayoutInfo {
+  const artW = artEl.size.width
+  const artH = artEl.size.height
+  const pad = Math.round(canvasW * 0.05)
+  const gap = Math.round(canvasW * 0.03)
+
+  // Artwork position
+  let artX: number
+  if (align === 'left') artX = pad
+  else if (align === 'right') artX = canvasW - pad - artW
+  else artX = Math.round((canvasW - artW) / 2)
+  const artY = Math.round((canvasH - artH) / 2)
+
+  // Text column bounds
+  let textColX: number
+  let textColW: number
+  if (align === 'left') {
+    textColX = artX + artW + gap
+    textColW = canvasW - textColX - pad
+  } else if (align === 'right') {
+    textColX = pad
+    textColW = artX - gap - pad
+  } else {
+    // Center 3-column: text on left of artwork
+    textColX = pad
+    textColW = artX - gap - pad
+  }
+
+  // Calculate total text block height for vertical centering
+  let totalTextH = 0
+  for (const el of visibleTextEls) {
+    const baseFontSize = (el.style.fontSize as number) ?? 24
+    const isTitle = el.content?.includes('{{title}}')
+    const isArtist = el.content?.includes('{{artistName}}')
+    const effectiveScale = isTitle && titleSizeScale != null ? titleSizeScale
+      : isArtist && artistSizeScale != null ? artistSizeScale
+      : fontSizeScale
+    const scaledSize = Math.round(baseFontSize * effectiveScale)
+    totalTextH += Math.round(scaledSize * 1.35)
+  }
+  const textStartY = artY + Math.round((artH - totalTextH) / 2)
+
+  // Badge region — compact and vertically centered within artwork extent
+  let badgeRegion: ColumnLayoutInfo['badgeRegion']
+  if (align === 'center') {
+    // 3-column: badges go right of artwork, vertically centered
+    const badgeX = artX + artW + gap
+    const badgeW = canvasW - badgeX - pad
+    const badgeH = Math.round(artH * 0.5)
+    const badgeY = artY + Math.round((artH - badgeH) / 2)
+    badgeRegion = { x: badgeX, y: badgeY, width: badgeW, height: badgeH }
+  } else {
+    // 2-column: badges below text in same column, compact
+    const badgeY = textStartY + totalTextH + Math.round(canvasH * 0.02)
+    const badgeH = Math.round(artH * 0.35)
+    badgeRegion = { x: textColX, y: badgeY, width: textColW, height: badgeH }
+  }
+
+  return {
+    artworkPosition: { x: artX, y: artY },
+    textColumn: { x: textColX, y: textStartY, width: textColW },
+    badgeRegion,
+  }
+}
+
+/**
+ * Create adjusted copies of template elements repositioned into column layout.
+ * Artwork is moved to computed position, text elements are stacked in the text column,
+ * and globalTextAlign is nullified (positions are pre-computed).
+ */
+function adjustElementsForColumns(
+  elements: TemplateElement[],
+  layout: ColumnLayoutInfo,
+  tokens: Record<string, string>,
+  hiddenElements: string[],
+  fontSizeScale: number,
+  titleSizeScale: number | null | undefined,
+  artistSizeScale: number | null | undefined,
+): TemplateElement[] {
+  const adjusted: TemplateElement[] = []
+  let currentY = layout.textColumn.y
+
+  for (const el of elements) {
+    const copy: TemplateElement = {
+      ...el,
+      position: { ...el.position },
+      size: { ...el.size },
+      style: { ...el.style },
+    }
+
+    if (el.type === 'artwork') {
+      copy.position.x = layout.artworkPosition.x
+      copy.position.y = layout.artworkPosition.y
+      copy.position.anchor = 'top-left'
+      adjusted.push(copy)
+    } else if (el.type === 'gradient' || el.type === 'shape') {
+      adjusted.push(copy)
+    } else if (el.type === 'text') {
+      // Skip hidden/empty elements
+      if (hiddenElements.includes(el.content ?? '')) continue
+      if (el.toggleable && el.visible === false) continue
+      if (el.content) {
+        const resolved = resolveTokens(el.content, tokens).trim()
+        if (resolved === '') continue
+      }
+
+      // Reposition into text column — center-aligned within column
+      copy.position.x = layout.textColumn.x + Math.round(layout.textColumn.width / 2)
+      copy.position.y = currentY
+      copy.position.anchor = 'top-center'
+      copy.size.width = layout.textColumn.width
+
+      const baseFontSize = (el.style.fontSize as number) ?? 24
+      const isTitle = el.content?.includes('{{title}}')
+      const isArtist = el.content?.includes('{{artistName}}')
+      const effectiveScale = isTitle && titleSizeScale != null ? titleSizeScale
+        : isArtist && artistSizeScale != null ? artistSizeScale
+        : fontSizeScale
+      const scaledSize = Math.round(baseFontSize * effectiveScale)
+      currentY += Math.round(scaledSize * 1.35)
+
+      adjusted.push(copy)
+    }
+  }
+
+  return adjusted
+}
+
 /**
  * Render a single asset to a canvas.
  * Returns a PNG blob when scale is undefined, or the canvas for preview.
@@ -94,17 +245,59 @@ export async function renderAsset(
   const artistOverride = style.fontOverride?.artistOverride ?? null
   const globalTextAlign = style.textAlign ?? null
 
-  // Redistribute flow elements to close gaps left by hidden/empty elements
-  const adjustedElements = redistributeElements(
-    variant.elements,
-    selection.overrides.hiddenElements,
-    tokens,
-    fontSizeScale,
-    titleOverride?.fontSizeScale,
-    artistOverride?.fontSizeScale,
-  )
+  // Detect wide inset-artwork format for column layout
+  const aspect = template.width / template.height
+  const artworkEl = variant.elements.find(e => e.type === 'artwork')
+  const artworkRadius = (artworkEl?.style.borderRadius as number) ?? 0
+  // For wide formats, use variant's defaultAlign as fallback so column layout activates by default
+  const columnAlign: 'left' | 'center' | 'right' | null =
+    globalTextAlign ?? variant.defaultAlign ?? null
+  const useColumnLayout = aspect > 1.5 && artworkEl && artworkRadius > 0 && columnAlign != null
 
-  for (const element of adjustedElements) {
+  let effectiveElements: TemplateElement[]
+  let effectiveAlign: 'left' | 'center' | 'right' | null = globalTextAlign
+  let badgeRegion: { x: number; y: number; width: number; height: number } | undefined
+
+  if (useColumnLayout && artworkEl) {
+    // Column layout: compute positions, then skip normal alignment overrides
+    const visibleTextEls = variant.elements.filter(e => {
+      if (e.type !== 'text') return false
+      if (selection.overrides.hiddenElements.includes(e.content ?? '')) return false
+      if (e.toggleable && e.visible === false) return false
+      if (e.content) {
+        const resolved = resolveTokens(e.content, tokens).trim()
+        if (resolved === '') return false
+      }
+      return true
+    })
+
+    const layout = computeColumnLayout(
+      template.width, template.height,
+      artworkEl, visibleTextEls, fontSizeScale,
+      titleOverride?.fontSizeScale, artistOverride?.fontSizeScale,
+      columnAlign!,
+    )
+
+    effectiveElements = adjustElementsForColumns(
+      variant.elements, layout, tokens,
+      selection.overrides.hiddenElements, fontSizeScale,
+      titleOverride?.fontSizeScale, artistOverride?.fontSizeScale,
+    )
+    effectiveAlign = null // positions are pre-computed, don't apply alignment overrides
+    badgeRegion = layout.badgeRegion
+  } else {
+    // Normal stacked layout: redistribute flow elements
+    effectiveElements = redistributeElements(
+      variant.elements,
+      selection.overrides.hiddenElements,
+      tokens,
+      fontSizeScale,
+      titleOverride?.fontSizeScale,
+      artistOverride?.fontSizeScale,
+    )
+  }
+
+  for (const element of effectiveElements) {
     if (selection.overrides.hiddenElements.includes(element.content ?? '')) continue
     if (element.toggleable && element.visible === false) continue
     // Skip elements whose resolved content is empty (e.g. releaseDate → '' for OUT NOW)
@@ -115,13 +308,13 @@ export async function renderAsset(
 
     switch (element.type) {
       case 'artwork':
-        drawArtwork(ctx, element, artworkImg, theme, palette, template.width, globalTextAlign)
+        drawArtwork(ctx, element, artworkImg, theme, palette, template.width, effectiveAlign)
         break
       case 'gradient':
         drawGradient(ctx, element, palette, theme, lightTheme)
         break
       case 'text':
-        drawText(ctx, element, tokens, headingFont, bodyFont, palette, theme, accent, textTransform, fontWeight, fontSizeScale, lightTheme, titleOverride, artistOverride, globalTextAlign)
+        drawText(ctx, element, tokens, headingFont, bodyFont, palette, theme, accent, textTransform, fontWeight, fontSizeScale, lightTheme, titleOverride, artistOverride, effectiveAlign)
         break
       case 'shape':
         drawShape(ctx, element, palette, accent)
@@ -136,7 +329,8 @@ export async function renderAsset(
     await drawStoreBadges(
       ctx, style.storeBadges ?? [], template.width, template.height,
       lightTheme, bodyFont, headingFont, badgeText, needsTextShadow(theme),
-      globalTextAlign,
+      badgeRegion ? null : globalTextAlign,  // use region positioning instead of alignment
+      badgeRegion,
     )
   }
 
